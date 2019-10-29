@@ -1,6 +1,48 @@
 #!/usr/bin/env python3
 import cloudscraper
 import time, os, sys, json
+from tinydb import TinyDB, Query
+
+class Manga:
+	def __init__(self, title, author, total_chapters, chapters_read, manga_id):
+		self.title = title
+		self.author = author
+		self.total_chapters = total_chapters
+		self.chapters_read = chapters_read
+		self.manga_id = manga_id
+
+def createDatabase():
+	# Create database
+	if not os.path.exists('DB.json'):
+		open('DB.json', 'a').close()
+
+def addManga(manga_id):
+	db = TinyDB('DB.json')
+	scraper = cloudscraper.create_scraper()
+	try:
+		manga_scrap = scraper.get("https://mangadex.org/api/manga/{}/".format(manga_id))
+		manga = json.loads(manga_scrap.text)
+	except (json.decoder.JSONDecodeError, ValueError) as err:
+		print("CloudFlare error: {}".format(err))
+		exit(1)
+
+	# Fetch manga info
+	newManga = Manga(manga['manga']['title'], manga['manga']['author'], 0, 0, manga_id)
+	
+	# Test if the manga already exist in the database
+	id = Query()
+	if db.search(id.manga_id==manga_id) is True:
+		print('{} already exist in the the database'.format(newManga.title))
+	else:	
+	# Add manga to the database
+		db.insert({
+				'title': newManga.title,
+				'author': newManga.author,
+				'total_chapters': newManga.total_chapters,
+				'chapters-read': newManga.chapters_read,
+				'manga_id': newManga.manga_id
+				})
+	
 
 def dlmanga(manga_id):
 	# Download chapters from a manga
@@ -92,6 +134,5 @@ def dlmanga(manga_id):
 	print('\nDone')
 
 if __name__=='__main__':
-	# dlmanga(16617)
-	# dlmanga(26293)
-	dlmanga(22631)
+	createDatabase()
+	addManga(16617)
