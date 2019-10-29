@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import cloudscraper
 import time, os, sys, json
 
@@ -92,6 +92,6 @@ def dlmanga(manga_id):
 	print('\nDone')
 
 if __name__=='__main__':
-	dlmanga(16617)
-	dlmanga(26293)
+	# dlmanga(16617)
+	# dlmanga(26293)
 	dlmanga(22631)

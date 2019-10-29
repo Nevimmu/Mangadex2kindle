@@ -1,2 +1,4 @@
 # Ignore files
 .vscode
+.vscode/
+download/
