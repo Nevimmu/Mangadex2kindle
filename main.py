@@ -41,6 +41,11 @@ def addManga(manga_id):
 				'chapters_read': newManga.chapters_read,
 				'manga_id': newManga.manga_id
 				})
+		number = int(input('N° of chapter(s) read : ') or '0')
+		if number == 0:
+			pass
+		else:
+			db.update({'chapters_read':number}, Query().manga_id == manga_id)
 	else:
 		if len(db.search(Query().manga_id==manga_id)) != 0:
 			print('{} already exist in the the database'.format(newManga.title))
@@ -54,12 +59,16 @@ def addManga(manga_id):
 					'manga_id': newManga.manga_id
 					})
 	
-	number = int(input('N° of chapter(s) read : '))
-	if number == 0:
-		pass
-	else:
-		db.update({'chapters_read':number}, Query().manga_id == manga_id)
-	
+			number = int(input('N° of chapter(s) read : ') or '0')
+			if number == 0:
+				pass
+			else:
+				db.update({'chapters_read':number}, Query().manga_id == manga_id)
+
+def removeManga(manga_id):
+	db = TinyDB('db.json')
+	db.remove(Query().manga_id==manga_id)
+	print('Manga removed')
 
 def showDB():
 	print('\nMangas in the database')
@@ -67,7 +76,6 @@ def showDB():
 
 	for i in db:
 		print('> {}'.format(i['title']))
-
 
 def dlmanga(manga_id):
 	# Download chapters from a manga
@@ -160,5 +168,6 @@ def dlmanga(manga_id):
 
 if __name__=='__main__':
 	createDatabase()
+	addManga(16617)
 	addManga(39)
 	showDB()
