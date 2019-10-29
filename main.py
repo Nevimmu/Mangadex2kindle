@@ -13,11 +13,11 @@ class Manga:
 
 def createDatabase():
 	# Create database
-	if not os.path.exists('DB.json'):
-		open('DB.json', 'a').close()
+	if not os.path.exists('db.json'):
+		open('db.json', 'a').close()
 
 def addManga(manga_id):
-	db = TinyDB('DB.json')
+	db = TinyDB('db.json')
 	scraper = cloudscraper.create_scraper()
 	try:
 		manga_scrap = scraper.get("https://mangadex.org/api/manga/{}/".format(manga_id))
@@ -30,7 +30,7 @@ def addManga(manga_id):
 	newManga = Manga(manga['manga']['title'], manga['manga']['author'], 0, 0, manga_id)
 	
 	# Test if the manga already exist in the database
-	f = open('DB.json', 'r')
+	f = open('db.json', 'r')
 
 	if db.search(Query().manga_id==manga_id) !='[]' and f.read() != '{"_default": {}}':
 		print('{} already exist in the the database'.format(newManga.title))
@@ -137,3 +137,4 @@ def dlmanga(manga_id):
 if __name__=='__main__':
 	createDatabase()
 	addManga(16617)
+	dlmanga(16617)
