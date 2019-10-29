@@ -30,10 +30,11 @@ def addManga(manga_id):
 	newManga = Manga(manga['manga']['title'], manga['manga']['author'], 0, 0, manga_id)
 	
 	# Test if the manga already exist in the database
-	id = Query()
-	if db.search(id.manga_id==manga_id) is True:
+	f = open('DB.json', 'r')
+
+	if db.search(Query().manga_id==manga_id) !='[]' and f.read() != '{"_default": {}}':
 		print('{} already exist in the the database'.format(newManga.title))
-	else:	
+	else:
 	# Add manga to the database
 		db.insert({
 				'title': newManga.title,
