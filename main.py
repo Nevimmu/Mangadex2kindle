@@ -32,10 +32,8 @@ def addManga(manga_id):
 	# Test if the manga already exist in the database
 	f = open('db.json', 'r')
 
-	if db.search(Query().manga_id==manga_id) !='[]' and f.read() != '{"_default": {}}':
-		print('{} already exist in the the database'.format(newManga.title))
-	else:
-	# Add manga to the database
+	if f.read() == '{"_default": {}}':
+		# Add manga to the database
 		db.insert({
 				'title': newManga.title,
 				'author': newManga.author,
@@ -43,7 +41,20 @@ def addManga(manga_id):
 				'chapters-read': newManga.chapters_read,
 				'manga_id': newManga.manga_id
 				})
-	
+	else:
+		test=db.search(Query().manga_id==manga_id)
+		if len(db.search(Query().manga_id==manga_id)) != 0:
+			print('{} already exist in the the database'.format(newManga.title))
+		else:
+		# Add manga to the database
+			db.insert({
+					'title': newManga.title,
+					'author': newManga.author,
+					'total_chapters': newManga.total_chapters,
+					'chapters-read': newManga.chapters_read,
+					'manga_id': newManga.manga_id
+					})
+
 
 def dlmanga(manga_id):
 	# Download chapters from a manga
@@ -137,4 +148,3 @@ def dlmanga(manga_id):
 if __name__=='__main__':
 	createDatabase()
 	addManga(16617)
-	dlmanga(16617)
