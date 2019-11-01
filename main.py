@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import cloudscraper
 import time, os, sys, json
+import zipfile
 
 def dlmanga(manga_id):
 	# Download chapters from a manga
@@ -67,6 +68,10 @@ def dlmanga(manga_id):
 			for page in chapter['page_array']:
 				images.append("{}{}/{}".format(server, hash, page))
 
+			# Zip images
+			images_to_zip = []
+
+
 			# Check if chapter is already downloaded and download images
 			i=0
 			for url in images:
@@ -85,10 +90,19 @@ def dlmanga(manga_id):
 				# Rename
 				old_name='{}\{}'.format(dest_folder, filename)
 				new_name='{}\{}.png'.format(dest_folder, i)
+				images_to_zip.append(new_name)
 
 				os.rename(old_name, new_name)
 
+				zf = zipfile.ZipFile(os.path.join(os.getcwd(), 'download', title, '{}.zip'.format(chapter_id[1])), 'w')
+				try:
+					with zf as file:
+						for page in images_to_zip:
+							file.write(page, os.path.basename(page))
+				finally:
+					zf.close()
 				time.sleep(1)
+
 	print('\nDone')
 
 if __name__=='__main__':
