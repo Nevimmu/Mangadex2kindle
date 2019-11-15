@@ -41,7 +41,7 @@ def addManga(manga_id):
 				'chapters_read': newManga.chapters_read,
 				'manga_id': newManga.manga_id
 				})
-		number = int(input('N° of chapter(s) read : ') or '0')
+		number = int(input('N° of chapter(s) read for {}: '.format(newManga.title)) or '0')
 		if number == 0:
 			pass
 		else:
@@ -59,7 +59,7 @@ def addManga(manga_id):
 					'manga_id': newManga.manga_id
 					})
 	
-			number = int(input('N° of chapter(s) read : ') or '0')
+			number = int(input('N° of chapter(s) read for {}: '.format(newManga.title)) or '0')
 			if number == 0:
 				pass
 			else:
