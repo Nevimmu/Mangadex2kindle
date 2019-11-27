@@ -3,14 +3,6 @@ import cloudscraper
 import time, os, sys, json
 from tinydb import TinyDB, Query
 
-class Manga:
-	def __init__(self, title, author, total_chapters, chapters_read, manga_id):
-		self.title = title
-		self.author = author
-		self.total_chapters = total_chapters
-		self.chapters_read = chapters_read
-		self.manga_id = manga_id
-
 def createDatabase():
 	# Create database
 	if not os.path.exists('db.json'):
@@ -26,40 +18,37 @@ def addManga(manga_id):
 		print("CloudFlare error: {}".format(err))
 		exit(1)
 
-	# Fetch manga info
-	newManga = Manga(manga['manga']['title'], manga['manga']['author'], 0, 0, manga_id)
-	
 	# Test if the manga already exist in the database
 	f = open('db.json', 'r')
 
 	if f.read() == '{"_default": {}}':
 		# Add manga to the database
 		db.insert({
-				'title': newManga.title,
-				'author': newManga.author,
-				'total_chapters': newManga.total_chapters,
-				'chapters_read': newManga.chapters_read,
-				'manga_id': newManga.manga_id
+				'title': manga['manga']['title'],
+				'author': manga['manga']['author'],
+				'total_chapters': 0,
+				'chapters_read': 0,
+				'manga_id': manga_id
 				})
-		number = int(input('N° of chapter(s) read for {}: '.format(newManga.title)) or '0')
+		number = int(input('N° of chapter(s) read for {}: '.format(manga['manga']['title'])) or '0')
 		if number == 0:
 			pass
 		else:
 			db.update({'chapters_read':number}, Query().manga_id == manga_id)
 	else:
 		if len(db.search(Query().manga_id==manga_id)) != 0:
-			print('{} already exist in the the database'.format(newManga.title))
+			print('{} already exist in the the database'.format(manga['manga']['title']))
 		else:
 		# Add manga to the database
 			db.insert({
-					'title': newManga.title,
-					'author': newManga.author,
-					'total_chapters': newManga.total_chapters,
-					'chapters_read': newManga.chapters_read,
-					'manga_id': newManga.manga_id
+					'title': manga['manga']['title'],
+					'author': manga['manga']['author'],
+					'total_chapters': 0,
+					'chapters_read': 0,
+					'manga_id': manga_id
 					})
 	
-			number = int(input('N° of chapter(s) read for {}: '.format(newManga.title)) or '0')
+			number = int(input('N° of chapter(s) read for {}: '.format(manga['manga']['title'])) or '0')
 			if number == 0:
 				pass
 			else:
