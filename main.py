@@ -18,6 +18,14 @@ def addManga(manga_id):
 		print("CloudFlare error: {}".format(err))
 		exit(1)
 
+	# Get chapters list
+	chapters_list = []
+	for chapter_id in manga["chapter"]:
+		if manga["chapter"][chapter_id]["chapter"] in chapters_list:
+			pass
+		else:
+			chapters_list.append(manga["chapter"][chapter_id]["chapter"])
+
 	# Test if the manga already exist in the database
 	f = open('db.json', 'r')
 
@@ -27,6 +35,7 @@ def addManga(manga_id):
 				'title': manga['manga']['title'],
 				'author': manga['manga']['author'],
 				'total_chapters': 0,
+				'chapters_list': chapters_list,
 				'chapters_read': 0,
 				'manga_id': manga_id
 				})
@@ -44,6 +53,7 @@ def addManga(manga_id):
 					'title': manga['manga']['title'],
 					'author': manga['manga']['author'],
 					'total_chapters': 0,
+					'chapters_list': chapters_list,
 					'chapters_read': 0,
 					'manga_id': manga_id
 					})
