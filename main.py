@@ -3,6 +3,8 @@ import cloudscraper
 import time, os, sys, json
 from tinydb import TinyDB, Query
 
+lang="gb"
+
 def createDatabase():
 	# Create database
 	if not os.path.exists('db.json'):
@@ -24,7 +26,10 @@ def addManga(manga_id):
 		if manga["chapter"][chapter_id]["chapter"] in chapters_list:
 			pass
 		else:
-			chapters_list.append(manga["chapter"][chapter_id]["chapter"])
+			if manga['chapter'][chapter_id]['lang_code'] == lang:
+				chapters_list.append(manga["chapter"][chapter_id]["chapter"])
+			else:
+				pass
 
 	# Test if the manga already exist in the database
 	f = open('db.json', 'r')
@@ -76,11 +81,9 @@ def showDB():
 	for i in db:
 		print('> {}'.format(i['title']))
 
-def dlmanga(manga_id):
+def dlmanga(manga_id, lang):
 	# Download chapters from a manga
 	
-	lang="gb"
-
 	# Create the scraper
 	scraper = cloudscraper.create_scraper()
 	try:
@@ -100,7 +103,7 @@ def dlmanga(manga_id):
 	for s in chap_list:
 		if "-" in s:
 			r = [int(float(n)) for n in s.split('-')]
-			s = list(range(r[0], r[1]+1))
+			s = list(range(r[0], r[1]))
 		else:
 			s = [float(s)]
 		requested_chapters.extend(s)
@@ -167,6 +170,6 @@ def dlmanga(manga_id):
 
 if __name__=='__main__':
 	createDatabase()
-	addManga(16617)
-	addManga(39)
+	addManga(26293)
+	dlmanga(26293, lang)
 	showDB()
