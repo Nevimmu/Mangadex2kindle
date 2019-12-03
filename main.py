@@ -22,12 +22,18 @@ def addManga(manga_id):
 
 	# Get chapters list
 	chapters_list = []
+	chapters_list_tmp = []
+	row = []
 	for chapter_id in manga["chapter"]:
-		if manga["chapter"][chapter_id]["chapter"] in chapters_list:
+		if manga["chapter"][chapter_id]["chapter"] in chapters_list_tmp:
 			pass
 		else:
 			if manga['chapter'][chapter_id]['lang_code'] == lang:
-				chapters_list.append(manga["chapter"][chapter_id]["chapter"])
+				row =[]
+				row.append(manga["chapter"][chapter_id]["chapter"])
+				row.append(chapter_id)
+				chapters_list.append(row)
+				chapters_list_tmp.append(manga["chapter"][chapter_id]["chapter"])
 			else:
 				pass
 
